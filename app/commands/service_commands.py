@@ -4,7 +4,7 @@ from utils import ensure_object_id
 
 def create_service_cmd(data):
     service = Service.model_validate(data)
-    service = g.db.service.insert_one(service.model_dump(exclude_none=True))
+    service = g.db.service.insert_one(service.model_dump(exclude_none=True, by_alias=True))
     return { "id": str(service.inserted_id), "msg": "service create successfully" }
 
 def get_service_cmd(service_id):

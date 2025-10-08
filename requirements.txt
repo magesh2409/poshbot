@@ -1,3 +1,4 @@
+certifi
 flask-pymongo
 flask
 pydantic

@@ -1,2 +1,2 @@
-MONGO_URI: "mongodb://localhost:27017"
-DB_NAME: "poshbot"
+MONGO_URI: "mongodb+srv://Cluster14103:poshbot123@cluster14103.sjzhkwp.mongodb.net"
+DB_NAME: "poshbot?retryWrites=true&w=majority"
