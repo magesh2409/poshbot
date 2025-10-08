@@ -41,7 +41,7 @@ class Agent(BaseModel):
     id: ObjectId = Field(default_factory=ObjectId, alias="_id")
     service_id: ObjectId = Field(alias="service_id")
     model_name: str = Field(max_length=50)
-    hyper_params: Optional[dict]
+    hyper_params: Optional[dict] = None
     created_at: int = Field(default_factory=get_current_epoch)
     updated_at: int = Field(default_factory=get_current_epoch)
 
@@ -63,9 +63,9 @@ class Topic(BaseModel):
     agent_id: ObjectId = Field(alias="agent_id")
     topic_name: str = Field(max_length=50)
     topic_description: str = Field(max_length=10000)
-    tools: Optional[str]
+    tools: Optional[str] = None
     model_type: Optional[str] = Field(default="chat_completion")
-    hyper_params: Optional[dict]
+    hyper_params: Optional[dict] = None
     created_at: int = Field(default_factory=get_current_epoch)
     updated_at: int = Field(default_factory=get_current_epoch)
 
@@ -120,7 +120,7 @@ class Thread(BaseModel):
     id: ObjectId = Field(default_factory=ObjectId, alias="_id")
     topic_id: ObjectId
     context_id: ObjectId
-    thread_meta: Optional[dict]
+    thread_meta: Optional[dict] = None
     created_at: int = Field(default_factory=get_current_epoch)
     updated_at: int = Field(default_factory=get_current_epoch)
 
@@ -133,8 +133,8 @@ class Thread(BaseModel):
 
     @model_validator(mode="before")
     def validate_thread_data(cls, info):
-        agent_id = info.get('agent_id', None)
-        validate_object_id(info, "agent_id", agent_id)
+        topic_id = info.get('topic_id', None)
+        validate_object_id(info, "topic_id", topic_id)
         context_id = info.get('context_id', None)
         validate_object_id(info, "context_id", context_id)
         return info
