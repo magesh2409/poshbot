@@ -8,7 +8,11 @@ class OpenAIChatCompletion:
         self.client = service.client
         self.query_config = service.query_config
         self.model_name = self.query_config.agent.model_name
-        self.previous_response_id = getattr(self.query_config.thread.thread_meta, "response_id", None)
+        self.previous_response_id = getattr(
+            getattr(self.query_config.thread, "thread_meta", None),
+            "response_id",
+            None
+        )
         self.tools = []
         self.prepare_tool_data()
 
