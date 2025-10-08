@@ -29,3 +29,9 @@ def update_thread(thread_id):
 def delete_thread(thread_id):
     response = thread_cmd.delete_thread_cmd(thread_id)
     return jsonify(response)
+
+@thread_api.route("/new", methods=["POST"])
+def create_thread_full_api():
+    data = request.json
+    response = thread_cmd.create_thread_full_api(data)
+    return jsonify(response)

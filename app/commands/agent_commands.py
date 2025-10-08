@@ -31,3 +31,9 @@ def delete_agent_cmd(agent_id):
         g.db.agent.delete_one({ "_id": agent_id })
         return { "msg": "agent deleted successfully" }
     return { "msg": "agent not found" }
+
+def create_agent_if_not_exists_cmd(data):
+    agent = g.db.agent.find_one({ "service_id": ensure_object_id(data["service_id"]), "model_name": data["model_name"] })
+    if agent:
+        return { "msg": "agent already exists", "id": str(agent.get("_id")) }
+    return create_agent_cmd(data)

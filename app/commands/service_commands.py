@@ -31,3 +31,9 @@ def delete_service_cmd(service_id):
         g.db.service.delete_one({ "_id": service_id })
         return { "msg": "service deleted successfully" }
     return { "msg": "service not found" }
+
+def create_service_if_not_exists_cmd(data):
+    service = g.db.service.find_one({ "user_id": ensure_object_id(data["user_id"]), "service_name": data["service_name"] })
+    if service:
+        return { "msg": "service already exists", "id": str(service.get("_id")) }
+    return create_service_cmd(data)

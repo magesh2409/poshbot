@@ -13,3 +13,7 @@ def ensure_object_id(id):
 def read_mcp_config():
     with open("conf/mcp_conf.yml", "r") as file:
         return yaml.safe_load(file)
+
+def default_openai_params():
+    with open("default_openai_params.yml", "r") as file:
+        return yaml.safe_load(file)

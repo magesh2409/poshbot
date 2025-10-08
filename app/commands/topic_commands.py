@@ -31,3 +31,9 @@ def delete_topic_cmd(topic_id):
         g.db.topic.delete_one({"_id":topic_id})
         return {"msg":"topic deleted successfully"}
     return {"msg":"topic not found"}
+
+def create_topic_if_not_exists_cmd(data):
+    topic = g.db.topic.find_one({"agent_id":ensure_object_id(data["agent_id"]), "topic_name": data["topic_name"], "model_type": data["model_type"] })
+    if topic:
+        return {"msg":"topic already exists", "id":str(topic.get("_id"))}
+    return create_topic_cmd(data)

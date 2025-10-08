@@ -1,6 +1,10 @@
 from models import Thread
-from flask import g, jsonify
-from utils import ensure_object_id
+from flask import g
+from utils import ensure_object_id, default_openai_params
+from app.commands.service_commands import create_service_if_not_exists_cmd
+from app.commands.agent_commands import create_agent_if_not_exists_cmd
+from app.commands.topic_commands import create_topic_if_not_exists_cmd
+from app.commands.context_commands import create_context_cmd
 
 def create_thread_cmd(data):
     thread = Thread.model_validate(data)
@@ -31,3 +35,18 @@ def delete_thread_cmd(thread_id):
         g.db.thread.delete_one({"_id":thread_id})
         return {"msg":"thread deleted successfully"}
     return {"msg":"thread not found"}
+
+def create_thread_full_api(data):
+    data = set_default_openai_params(data)
+    service = create_service_if_not_exists_cmd({ "user_id": data["user_id"], "service_name": data["service_name"] })
+    agent = create_agent_if_not_exists_cmd({ "service_id": service.get("id"), "model_name": data["model_name"] })
+    topic = create_topic_if_not_exists_cmd({ "agent_id": agent.get("id"), "topic_name": data["topic_name"], "model_type": data["model_type"] })
+    context = create_context_cmd({})
+    thread = create_thread_cmd({ "topic_id":topic.get("id"), "context_id": context.get("id") })
+    return thread
+
+def set_default_openai_params(data):
+    openai_params = default_openai_params()
+    openai_params.update(data)
+    return openai_params
+
