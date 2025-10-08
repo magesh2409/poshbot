@@ -57,6 +57,29 @@ class Agent(BaseModel):
         validate_object_id(info, "service_id", service_id)
         return info
 
+class Topic(BaseModel):
+    id: ObjectId = Field(default_factory=ObjectId, alias="_id")
+    agent_id: ObjectId = Field(alias="agent_id")
+    topic_name: str = Field(max_length=50)
+    topic_description: str = Field(max_length=10000)
+    hyper_params: Optional[dict]
+    created_at: int = Field(default_factory=get_current_epoch)
+    updated_at: int = Field(default_factory=get_current_epoch)
+
+    model_config = {
+        "arbitrary_types_allowed": True,
+        "populate_by_name": True,
+        "json_encoders": {ObjectId: str},
+        "extra": "forbid"
+    }
+
+    @model_validator(mode="before")
+    def validate_topic_data(cls, info):
+        agent_id = info.get('agent_id', None)
+        validate_object_id(info, "agent_id", agent_id)
+        return info
+
+
 class Context(BaseModel):
     id: ObjectId = Field(default_factory=ObjectId, alias="_id")
     created_at: int = Field(default_factory=get_current_epoch)
