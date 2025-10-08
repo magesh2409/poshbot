@@ -1,10 +1,17 @@
-from pydantic import BaseModel, Field
+from turtledemo.penrose import inflatedart
+
+from pydantic import BaseModel, Field, model_validator
 from bson import ObjectId
 import time
 from typing import Optional
 
 def get_current_epoch():
     return int(time.time()*1000)
+
+def validate_object_id(data, key, value):
+    if isinstance(value, str):
+        data[key] = ObjectId(value)
+    return value
 
 
 
@@ -22,14 +29,13 @@ class Service(BaseModel):
         "extra": "forbid"
     }
 
-data = {
-    "service_name" : "google",
-    "user_id" : ObjectId(),
-    "a" : "b"
-}
+    @model_validator(mode="before")
+    def validate_service_data(cls, info):
+        user_id = info.get('user_id', None)
+        validate_object_id(info, "user_id", user_id)
+        return info
 
-service = Service.model_validate(data)
-print(service)
+
 class Agent(BaseModel):
     id: ObjectId = Field(default_factory=ObjectId, alias="_id")
     service_id: ObjectId = Field(alias="service_id")
@@ -44,6 +50,12 @@ class Agent(BaseModel):
         "json_encoders": {ObjectId: str},
         "extra": "forbid"
     }
+
+    @model_validator(mode="before")
+    def validate_agent_data(cls, info):
+        service_id = info.get('service_id', None)
+        validate_object_id(info, "service_id", service_id)
+        return info
 
 class Context(BaseModel):
     id: ObjectId = Field(default_factory=ObjectId, alias="_id")
@@ -72,6 +84,12 @@ class ContextData(BaseModel):
         "extra": "forbid"
     }
 
+    @model_validator(mode="before")
+    def validate_context_data(cls, info):
+        context_id = info.get('context_id', None)
+        validate_object_id(info,"context_id", context_id)
+        return info
+
 class Thread(BaseModel):
     id: ObjectId = Field(default_factory=ObjectId, alias="_id")
     agent_id: ObjectId
@@ -87,6 +105,14 @@ class Thread(BaseModel):
         "extra": "forbid"
     }
 
+    @model_validator(mode="before")
+    def validate_thread_data(cls, info):
+        agent_id = info.get('agent_id', None)
+        validate_object_id(info, "agent_id", agent_id)
+        context_id = info.get('context_id', None)
+        validate_object_id(info, "context_id", context_id)
+        return info
+
 class Message(BaseModel):
     id: ObjectId = Field(default_factory=ObjectId, alias="_id")
     thread_id: ObjectId
@@ -100,3 +126,9 @@ class Message(BaseModel):
         "json_encoders": {ObjectId: str},
         "extra": "forbid"
     }
+
+    @model_validator(mode="before")
+    def validate_message_data(cls, info):
+        thread_id = info.get('thread_id', None)
+        validate_object_id(info, "thread_id", thread_id)
+        return info

@@ -1,11 +1,11 @@
 from models import Service
-from flask import g
+from flask import g, jsonify
 from utils import ensure_object_id
 
 def create_service_cmd(data):
     service = Service.model_validate(data)
     service = g.db.service.insert_one(service.model_dump(exclude_none=True))
-    return { "id": service.id, "msg": "service create successfully" }
+    return { "id": str(service.inserted_id), "msg": "service create successfully" }
 
 def get_service_cmd(service_id):
     service_id = ensure_object_id(service_id)

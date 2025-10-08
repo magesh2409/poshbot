@@ -1,13 +1,12 @@
 from http.client import responses
 
 from flask import Blueprint, request, jsonify
-from models import Service
 from app.commands import service_commands as service_cmd
 
-service_api = Blueprint("service", __name__)
+service_api = Blueprint("/service", __name__)
 
 
-@service_api.route('/create', methods=["POST"])
+@service_api.route('/', methods=["POST"])
 def create_service():
     data = request.json
     response = service_cmd.create_service_cmd(data)
