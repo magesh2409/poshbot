@@ -10,5 +10,6 @@ def ensure_object_id(id):
         return ObjectId(id)
     return id
 
-
-
+def read_mcp_config():
+    with open("conf/mcp_conf.yml", "r") as file:
+        return yaml.safe_load(file)

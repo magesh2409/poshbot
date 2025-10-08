@@ -10,6 +10,8 @@ def initialize_db(app):
     app.config['MONGO_URI'] = mongo_uri
     mongo = PyMongo(app)
     app.mongo = mongo
+
+    app.logger.info("Setted up Mongo")
     # return mongo
 
 def get_db():

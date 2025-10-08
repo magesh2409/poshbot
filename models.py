@@ -19,6 +19,7 @@ class Service(BaseModel):
     id: ObjectId = Field(default_factory=ObjectId, alias="_id")
     user_id: ObjectId = Field(alias="user_id")
     service_name: str = Field(max_length=50)
+    api_key: str = Field(max_length=1000)
     created_at: int = Field(default_factory=get_current_epoch)
     updated_at: int = Field(default_factory=get_current_epoch)
 
@@ -62,6 +63,8 @@ class Topic(BaseModel):
     agent_id: ObjectId = Field(alias="agent_id")
     topic_name: str = Field(max_length=50)
     topic_description: str = Field(max_length=10000)
+    tools: Optional[str]
+    model_type: Optional[str] = Field(default="chat_completion")
     hyper_params: Optional[dict]
     created_at: int = Field(default_factory=get_current_epoch)
     updated_at: int = Field(default_factory=get_current_epoch)
@@ -115,7 +118,7 @@ class ContextData(BaseModel):
 
 class Thread(BaseModel):
     id: ObjectId = Field(default_factory=ObjectId, alias="_id")
-    agent_id: ObjectId
+    topic_id: ObjectId
     context_id: ObjectId
     thread_meta: Optional[dict]
     created_at: int = Field(default_factory=get_current_epoch)
@@ -140,6 +143,7 @@ class Message(BaseModel):
     id: ObjectId = Field(default_factory=ObjectId, alias="_id")
     thread_id: ObjectId
     response: str
+    role: str
     created_at: int = Field(default_factory=get_current_epoch)
     updated_at: int = Field(default_factory=get_current_epoch)
 
