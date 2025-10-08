@@ -4,7 +4,7 @@ from utils import ensure_object_id
 
 def create_context_data_cmd(data):
     context_data = ContextData.model_validate(data)
-    context_data = g.db.context_data.insert_one(context_data.model_dump(exclude_none=True))
+    context_data = g.db.context_data.insert_one(context_data.model_dump(exclude_none=True, by_alias=True))
     return { "id": str(context_data.inserted_id), "msg": "context data create successfully" }
 
 def get_context_data_cmd(context_data_id):

@@ -5,7 +5,7 @@ from utils import ensure_object_id
 
 def create_message_cmd(data):
     message = Service.model_validate(data)
-    message = g.db.service.insert_one(message.model_dump(exclude_none=True))
+    message = g.db.service.insert_one(message.model_dump(exclude_none=True, by_alias=True))
     return { "id": str(message.inserted_id), "msg": "service create successfully" }
 
 def get_message_cmd(message_id):

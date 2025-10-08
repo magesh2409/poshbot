@@ -4,7 +4,7 @@ from utils import ensure_object_id
 
 def create_thread_cmd(data):
     thread = Thread.model_validate(data)
-    thread = g.db.thread.insert_one(thread.model_dump(exclude_none=True))
+    thread = g.db.thread.insert_one(thread.model_dump(exclude_none=True, by_alias=True))
     return { "id": str(thread.inserted_id), "msg": "thread create successfully" }
 
 def get_thread_cmd(thread_id):

@@ -4,7 +4,7 @@ from utils import ensure_object_id
 
 def create_topic_cmd(data):
     topic = Topic.model_validate(data)
-    topic = g.db.topic.insert_one(topic.model_dump(exclude_none=True))
+    topic = g.db.topic.insert_one(topic.model_dump(exclude_none=True, by_alias=True))
     return { "id": str(topic.inserted_id), "msg": "topic create successfully" }
 
 def get_topic_cmd(topic_id):

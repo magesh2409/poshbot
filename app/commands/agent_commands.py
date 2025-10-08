@@ -4,7 +4,7 @@ from utils import ensure_object_id
 
 def create_agent_cmd(data):
     agent = Agent.model_validate(data)
-    agent = g.db.agent.insert_one(agent.model_dump(exclude_none=True))
+    agent = g.db.agent.insert_one(agent.model_dump(exclude_none=True, by_alias=True))
     return { "id": str(agent.inserted_id), "msg": "agent create successfully" }
 
 def get_agent_cmd(agent_id):

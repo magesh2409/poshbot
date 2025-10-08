@@ -1,8 +1,4 @@
-from http.client import responses
-
 from flask import Blueprint, request, jsonify
-
-from app.api import service_api
 from app.commands import topic_commands as topic_cmd
 
 topic_api = Blueprint("topic", __name__)
