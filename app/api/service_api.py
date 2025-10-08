@@ -3,8 +3,7 @@ from http.client import responses
 from flask import Blueprint, request, jsonify
 from app.commands import service_commands as service_cmd
 
-service_api = Blueprint("/service", __name__)
-
+service_api = Blueprint("service", __name__)
 
 @service_api.route('/', methods=["POST"])
 def create_service():
