@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, current_app
 from app.commands import thread_commands as thread_cmd
 
 thread_api = Blueprint("thread", __name__)
@@ -33,5 +33,6 @@ def delete_thread(thread_id):
 @thread_api.route("/new", methods=["POST"])
 def create_thread_full_api():
     data = request.json
+    current_app.logger.info(f"Creating a thread with payload as {data}")
     response = thread_cmd.create_thread_full_api(data)
     return jsonify(response)
