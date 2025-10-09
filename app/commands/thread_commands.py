@@ -45,6 +45,7 @@ def create_thread_full_api(data):
     context = create_context_cmd({})
 
     listings_info = data["listings_info"]
+    listings_info = listings_info["data"]
     context_datas = create_context_data_by_listings_info(listings_info, { "service_id": service.get("id"), "context_id": context.get("id") })
     thread = create_thread_cmd({ "topic_id":topic.get("id"), "context_id": context.get("id") })
     return thread
