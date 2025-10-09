@@ -1,5 +1,3 @@
-from functools import total_ordering
-
 from utils import read_mcp_config
 
 
@@ -14,7 +12,32 @@ class OpenAIChatCompletion:
             None
         )
         self.tools = []
+        self.file_ids = []
         self.prepare_tool_data()
+        self.prepare_files()
+
+    def prepare_files(self):
+        context_data = list(self.query_config.context_data)
+        for data in context_data:
+            if data.get("file_id", None):
+                self.file_ids.append(data.get("file_id"))
+
+    def prepare_send_msg(self):
+        msgs = []
+        msgs.append({"role": "developer", "content": self.query_config.topic.topic_description})
+        for file_id in self.file_ids:
+            msgs.append({
+                "role": "user",
+                "content": [
+                    {
+                        "type": "input_image",
+                        "file_id": file_id
+                    }
+                ]
+            })
+        return msgs
+
+
 
     def prepare_tool_data(self):
         tools_types = getattr(self.query_config.topic, "tools", "")
@@ -41,9 +64,14 @@ class OpenAIChatCompletion:
                 })
 
     def send_response(self, message):
+        msgs = self.prepare_send_msg()
+        msgs.append({
+            "role": "user",
+            "content": str(message)
+        })
         response = self.client.responses.create(
             model = self.model_name,
-            input = str(message),
+            input = msgs,
             previous_response_id = self.previous_response_id,
             tools = self.tools
         )

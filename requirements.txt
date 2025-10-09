@@ -1,3 +1,4 @@
+requests
 certifi
 flask-pymongo
 flask
