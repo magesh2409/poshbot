@@ -17,7 +17,8 @@ class OpenAIChatCompletion:
         self.prepare_tool_data()
 
     def prepare_tool_data(self):
-        tools_types = self.query_config.topic.tools
+        tools_types = getattr(self.query_config.topic, "tools", "")
+        tools_types = tools_types.split(",")
         for tool in tools_types:
             if tool == "code_interpreter":
                 self.tools.append({
