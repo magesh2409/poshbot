@@ -13,6 +13,7 @@ class OpenAIChatCompletion:
         )
         self.tools = []
         self.file_ids = []
+        self.meta_content = None
         self.prepare_tool_data()
         self.prepare_files()
 
@@ -21,10 +22,17 @@ class OpenAIChatCompletion:
         for data in context_data:
             if data.get("file_id", None):
                 self.file_ids.append(data.get("file_id"))
+            if data.get("meta_content", None):
+                self.meta_content = data.get("meta_content")
 
     def prepare_send_msg(self):
         msgs = []
-        msgs.append({"role": "developer", "content": self.query_config.topic.topic_description})
+        listing_description = f"""
+        \n\n ======The below is the listings data=====
+        {self.meta_content}
+        \n\n
+        """
+        msgs.append({"role": "developer", "content": self.query_config.topic.topic_description + listing_description})
         for file_id in self.file_ids:
             msgs.append({
                 "role": "user",
@@ -36,7 +44,6 @@ class OpenAIChatCompletion:
                 ]
             })
         return msgs
-
 
 
     def prepare_tool_data(self):
@@ -80,10 +87,11 @@ class OpenAIChatCompletion:
 
     def construct_response(self, response):
         result = {
-            "output_text" : response.output_text,
+            "message" : response.output_text,
             "role" : "system",
-            "response" : response.id
-
+            "thread_meta": {
+                "response": response.id
+            }
         }
         return result
 

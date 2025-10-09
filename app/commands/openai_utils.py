@@ -33,6 +33,8 @@ def download_cloudfront_image(data):
     return file_name
 
 def handle_listing_file(data):
+    if "s3_url" not in data:
+        return data
     file_name = download_cloudfront_image(data)
     service = get_service_cmd(data["service_id"])
     file_id = upload_file_to_openai(file_name, service.get("api_key"))

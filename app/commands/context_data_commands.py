@@ -35,6 +35,7 @@ def delete_context_data_cmd(context_data_id):
     return {"msg":"context data not found"}
 
 def create_context_data_by_listings_info(listings_info, data):
+    create_meta_content_payload(listings_info, data)
     cover_shot = listings_info.get("cover_shot", None)
     if cover_shot:
         url = cover_shot.get("url", None)
@@ -56,3 +57,11 @@ def create_context_data_by_listings_info(listings_info, data):
                 "s3_url" : url
             }
             create_context_data_cmd(payload)
+
+def create_meta_content_payload(listings_info, data):
+    payload = {
+        "service_id": data["service_id"],
+        "context_id": data["context_id"],
+        "meta_content": str(listings_info)
+    }
+    create_context_data_cmd(payload)

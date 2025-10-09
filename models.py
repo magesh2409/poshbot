@@ -100,7 +100,7 @@ class ContextData(BaseModel):
     id: ObjectId = Field(default_factory=ObjectId, alias="_id")
     service_id: ObjectId
     context_id: ObjectId
-    s3_url: Optional[str] = Field(max_length=1000)
+    s3_url: Optional[str] = Field(max_length=1000, default=None)
     file_id: Optional[str] = Field(max_length=100, default=None)
     meta_content: Optional[str] = None
     created_at: int = Field(default_factory=get_current_epoch)
@@ -147,7 +147,7 @@ class Thread(BaseModel):
 class Message(BaseModel):
     id: ObjectId = Field(default_factory=ObjectId, alias="_id")
     thread_id: ObjectId
-    response: str
+    message: str
     role: str
     created_at: int = Field(default_factory=get_current_epoch)
     updated_at: int = Field(default_factory=get_current_epoch)

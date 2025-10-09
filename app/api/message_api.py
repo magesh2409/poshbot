@@ -10,8 +10,8 @@ def create_message():
     return jsonify(response)
 
 @message_api.route('/<message_id>',methods=["GET"])
-def get_message():
-    response = message_cmd.get_message_cmd(data)
+def get_message(message_id):
+    response = message_cmd.get_message_cmd(message_id)
     return jsonify(response)
 
 @message_api.route('/',methods=["GET"])
@@ -20,9 +20,9 @@ def get_all_message():
     return jsonify(response)
 
 @message_api.route('/<message_id>',methods=["PUT"])
-def update_message():
+def update_message(message_id):
     data = request.json
-    response = message_cmd.update_message_cmd(data)
+    response = message_cmd.update_message_cmd(message_id,data)
     return jsonify(response)
 
 @message_api.route('/<message_id>',methods=["DELETE"])
