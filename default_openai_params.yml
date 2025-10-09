@@ -117,3 +117,4 @@ If a user asks something outside of product or seller scope:
 "
 topic_name: "POSHBOT"
 model_type: "chat_completion"
+tool_type:

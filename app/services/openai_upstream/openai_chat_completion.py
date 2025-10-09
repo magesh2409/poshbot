@@ -67,7 +67,8 @@ class OpenAIChatCompletion:
                 self.tools.append({
                     "type": "mcp",
                     "server_label": mcp_params["name"],
-                    "server_url": mcp_params["url"]
+                    "server_url": mcp_params["url"],
+                    "require_approval": "never"
                 })
 
     def send_response(self, message):
@@ -93,6 +94,8 @@ class OpenAIChatCompletion:
                 "response": response.id
             }
         }
+
+        del result["thread_meta"]
         return result
 
 

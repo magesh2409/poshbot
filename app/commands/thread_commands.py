@@ -41,7 +41,7 @@ def create_thread_full_api(data):
     data = set_default_openai_params(data)
     service = create_service_if_not_exists_cmd({ "user_id": data["user_id"], "service_name": data["service_name"] })
     agent = create_agent_if_not_exists_cmd({ "service_id": service.get("id"), "model_name": data["model_name"] })
-    topic = create_topic_if_not_exists_cmd({ "agent_id": agent.get("id"), "topic_name": data["topic_name"], "model_type": data["model_type"] })
+    topic = create_topic_if_not_exists_cmd({ "agent_id": agent.get("id"), "topic_name": data["topic_name"], "model_type": data["model_type"], "tools": data["tool_type"] })
     context = create_context_cmd({})
 
     listings_info = data["listings_info"]
