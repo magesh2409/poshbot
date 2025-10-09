@@ -5,6 +5,7 @@ from app.commands.service_commands import create_service_if_not_exists_cmd
 from app.commands.agent_commands import create_agent_if_not_exists_cmd
 from app.commands.topic_commands import create_topic_if_not_exists_cmd
 from app.commands.context_commands import create_context_cmd
+from app.commands.context_data_commands import create_context_data_by_listings_info
 
 def create_thread_cmd(data):
     thread = Thread.model_validate(data)
@@ -42,6 +43,9 @@ def create_thread_full_api(data):
     agent = create_agent_if_not_exists_cmd({ "service_id": service.get("id"), "model_name": data["model_name"] })
     topic = create_topic_if_not_exists_cmd({ "agent_id": agent.get("id"), "topic_name": data["topic_name"], "model_type": data["model_type"] })
     context = create_context_cmd({})
+
+    listings_info = data["listings_info"]
+    context_datas = create_context_data_by_listings_info(listings_info, { "service_id": service.get("id"), "context_id": context.get("id") })
     thread = create_thread_cmd({ "topic_id":topic.get("id"), "context_id": context.get("id") })
     return thread
 

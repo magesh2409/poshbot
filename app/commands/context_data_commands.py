@@ -1,8 +1,10 @@
 from models import ContextData
 from flask import g, jsonify
 from utils import ensure_object_id
+from app.commands.openai_utils import handle_listing_file
 
 def create_context_data_cmd(data):
+    handle_listing_file(data)
     context_data = ContextData.model_validate(data)
     context_data = g.db.context_data.insert_one(context_data.model_dump(exclude_none=True, by_alias=True))
     return { "id": str(context_data.inserted_id), "msg": "context data create successfully" }
@@ -31,3 +33,26 @@ def delete_context_data_cmd(context_data_id):
         g.db.context_data.delete_one({"_id":context_data_id})
         return {"msg":"context data deleted successfully"}
     return {"msg":"context data not found"}
+
+def create_context_data_by_listings_info(listings_info, data):
+    cover_shot = listings_info.get("cover_shot", None)
+    if cover_shot:
+        url = cover_shot.get("url", None)
+        if url:
+            payload = {
+                "service_id" : data["service_id"],
+                "context_id" : data["context_id"],
+                "s3_url" : url
+            }
+            create_context_data_cmd(payload)
+
+    pictures_list = listings_info.get("pictures", [])
+    for picture in pictures_list:
+        url = picture.get("url", None)
+        if url:
+            payload = {
+                "service_id" : data["service_id"],
+                "context_id" : data["context_id"],
+                "s3_url" : url
+            }
+            create_context_data_cmd(payload)
