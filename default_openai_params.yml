@@ -29,6 +29,8 @@ Product Images → For visual verification of details or wear
 
 MCP Server Data → Seller insights including:
 
+Note that you get call the method to get seller data you need that `seller_id` , for seller_id the you can a key as `creator_id` from the listing data you i gave at the last
+
 Number of reviews
 
 Average rating
@@ -117,4 +119,4 @@ If a user asks something outside of product or seller scope:
 "
 topic_name: "POSHBOT"
 model_type: "chat_completion"
-tool_type:
+tool_type: "mcp"
